@@ -1,0 +1,55 @@
+{
+  "name": "rx-ipc-electron",
+  "version": "0.1.0",
+  "description": "Pass RxJS Observables through IPC in Electron",
+  "main": "lib/index.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "build": "rimraf lib && tsc",
+    "clean": "rimraf lib",
+    "lint": "tslint **/*.ts -e \"lib/**/*.ts\" -t verbose",
+    "mocha": "electron-mocha ./test/*.ts",
+    "test": "npm run lint && npm run mocha"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/colinskow/rx-electron-ipc.git"
+  },
+  "keywords": [
+    "Electron",
+    "IPC",
+    "ipcMain",
+    "ipcRenderer",
+    "RxJS",
+    "Observable"
+  ],
+  "author": "Colin Skow <colinskow@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/colinskow/rx-electron-ipc/issues"
+  },
+  "homepage": "https://github.com/colinskow/rx-electron-ipc",
+  "dependencies": {
+    "rxjs": "^5.0.0"
+  },
+  "peerDependencies": {
+    "electron": "^1.4.0"
+  },
+  "devDependencies": {
+    "@types/chai": "^3.5.2",
+    "@types/electron": "^1.4.37",
+    "@types/mocha": "^2.2.41",
+    "@types/node": "^7.0.18",
+    "chai": "^3.5.0",
+    "electron": "^1.6.6",
+    "electron-mocha": "^3.4.0",
+    "mocha-typescript": "^1.1.2",
+    "rimraf": "^2.6.1",
+    "ts-node": "^3.0.4",
+    "tslib": "^1.7.0",
+    "tslint": "^5.2.0",
+    "typescript": "~2.3.2"
+  }
+}

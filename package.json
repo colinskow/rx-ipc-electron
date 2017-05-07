@@ -1,6 +1,6 @@
 {
   "name": "rx-ipc-electron",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Pass RxJS Observables through IPC in Electron",
   "main": "lib/index.js",
   "directories": {
@@ -15,7 +15,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/colinskow/rx-electron-ipc.git"
+    "url": "git+https://github.com/colinskow/rx-ipc-electron.git"
   },
   "keywords": [
     "Electron",
@@ -28,9 +28,9 @@
   "author": "Colin Skow <colinskow@gmail.com>",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/colinskow/rx-electron-ipc/issues"
+    "url": "https://github.com/colinskow/rx-ipc-electron/issues"
   },
-  "homepage": "https://github.com/colinskow/rx-electron-ipc",
+  "homepage": "https://github.com/colinskow/rx-ipc-electron",
   "dependencies": {
     "rxjs": "^5.0.0"
   },

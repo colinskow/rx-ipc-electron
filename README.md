@@ -19,15 +19,15 @@ npm install rx-ipc-electron --save
 #### From the Electron MAIN process
 
 ```js
-import rxIpc from 'rx-ipc-electron/main';
-// const rxIpc = require('rx-ipc-electron/main');
+import rxIpc from 'rx-ipc-electron/lib/main';
+// const rxIpc = require('rx-ipc-electron/lib/main');
 ```
 
 #### From the Electron RENDERER process
 
 ```js
-import rxIpc from 'rx-ipc-electron/renderer';
-// const rxIpc = require('rx-ipc-electron/renderer');
+import rxIpc from 'rx-ipc-electron/lib/renderer';
+// const rxIpc = require('rx-ipc-electron/lib/renderer');
 ```
 
 ## Quick Start

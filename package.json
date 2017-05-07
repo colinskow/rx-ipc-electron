@@ -1,6 +1,6 @@
 {
   "name": "rx-ipc-electron",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "Pass RxJS Observables through IPC in Electron",
   "main": "lib/index.js",
   "directories": {

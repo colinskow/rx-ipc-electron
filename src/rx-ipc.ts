@@ -1,6 +1,6 @@
 import { Observable } from 'rxjs';
 
-import { IpcListener, ObservableFactoryFunction, Receiver } from './index';
+import { ObservableFactoryFunction, Receiver } from './index';
 
 export class RxIpc {
   static listenerCount: number = 0;
@@ -46,7 +46,7 @@ export class RxIpc {
       // Save the listener function so it can be removed
       const replyTo = event.sender;
       const observable = observableFactory(...args);
-      observable.subscribe(
+      const subscription = observable.subscribe(
         (data) => {
           replyTo.send(subChannel, 'n', data);
         },
@@ -57,6 +57,8 @@ export class RxIpc {
           replyTo.send(subChannel, 'c');
         }
       );
+
+      replyTo.on('destroyed', () => subscription.unsubscribe());
     });
   }
 

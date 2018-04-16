@@ -1,13 +1,12 @@
-import { Observable } from 'rxjs';
-
-import { IpcListener, ObservableFactoryFunction, Receiver } from './index';
+import { Observable } from 'rxjs/Observable';
+import { ObservableFactoryFunction, Receiver } from './types';
 
 export class RxIpc {
   static listenerCount: number = 0;
 
   listeners: { [id: string]: boolean } = {};
 
-  constructor(private ipc) {
+  constructor(private ipc: Electron.EventEmitter | Receiver) {
     // Respond to checks if a listener is registered
     this.ipc.on('rx-ipc-check-listener', (event, channel) => {
       const replyChannel = 'rx-ipc-check-reply:' + channel;
@@ -20,7 +19,7 @@ export class RxIpc {
   }
 
   checkRemoteListener(channel: string, receiver: Receiver) {
-    const target = receiver == null ? this.ipc : receiver;
+    const target = receiver == null ? (this.ipc as Receiver) : receiver;
     return new Promise((resolve, reject) => {
       this.ipc.once('rx-ipc-check-reply:' + channel, (event, result) => {
         if (result) {
@@ -42,11 +41,11 @@ export class RxIpc {
 
   registerListener(channel: string, observableFactory: ObservableFactoryFunction) {
     this.listeners[channel] = true;
-    this.ipc.on(channel, function openChannel(event, subChannel, ...args) {
+    this.ipc.on(channel, (event, subChannel, ...args) => {
       // Save the listener function so it can be removed
       const replyTo = event.sender;
       const observable = observableFactory(...args);
-      observable.subscribe(
+      const subscription = observable.subscribe(
         (data) => {
           replyTo.send(subChannel, 'n', data);
         },
@@ -57,6 +56,8 @@ export class RxIpc {
           replyTo.send(subChannel, 'c');
         }
       );
+
+      replyTo.on('destroyed', () => subscription.unsubscribe());
     });
   }
 
@@ -66,17 +67,17 @@ export class RxIpc {
   }
 
   runCommand(channel: string, receiver: Receiver = null, ...args: any[]): Observable<any> {
-    const self = this;
-    const subChannel = channel + ':' + RxIpc.listenerCount;
-    RxIpc.listenerCount++;
-    const target = receiver == null ? this.ipc : receiver;
+    const subChannel = `${channel}:${RxIpc.listenerCount}`;
+    RxIpc.listenerCount+=1;
+    const target = receiver == null ? (this.ipc as Receiver) : receiver;
     target.send(channel, subChannel, ...args);
     return new Observable((observer) => {
       this.checkRemoteListener(channel, receiver)
         .catch(() => {
           observer.error('Invalid channel: ' + channel);
         });
-      this.ipc.on(subChannel, function listener(event, type, data) {
+
+      const listener = (event, type, data) => {
         switch (type) {
           case 'n':
             observer.next(data);
@@ -89,13 +90,15 @@ export class RxIpc {
         }
         // Cleanup
         return () => {
-          self.ipc.removeListener(subChannel, listener);
+          this.ipc.removeListener(subChannel, listener);
         };
-      });
+      };
+
+      this.ipc.on(subChannel, listener);
     });
   }
 
-  _getListenerCount(channel: string) {
+  getListenerCount(channel: string) {
     return this.ipc.listenerCount(channel);
   }
 

@@ -1,8 +1,8 @@
-import { ipcMain, webContents } from 'electron';
-import { Observable } from 'rxjs';
+import { ipcMain } from 'electron';
+import { Observable } from 'rxjs/Rx';
 import rxIpc from '../../src/main';
 
-function testMain(...args) {
+function testMain(...args: any[]) {
   return Observable.from(args);
 }
 
@@ -19,7 +19,7 @@ ipcMain.on('main-run-command', (event) => {
   rxIpc.runCommand('command-from-main', event.sender, 3, 2, 1)
     .subscribe(
       (data) => {
-        results.push(data)
+        results.push(data);
       },
       (err) => {
         throw err;
@@ -27,7 +27,7 @@ ipcMain.on('main-run-command', (event) => {
       () => {
         event.sender.send('results-from-main', results);
       }
-    )
+    );
 });
 
 rxIpc.registerListener('test-main', testMain);

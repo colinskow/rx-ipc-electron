@@ -1,9 +1,9 @@
-import { Observable } from 'rxjs';
+import { RxIpc } from './rx-ipc';
 
-export type IpcListener = (event, ...args) => void;
+export { RxIpc } from './rx-ipc';
+export { ObservableFactoryFunction, Receiver } from './types';
 
-export type ObservableFactoryFunction = (...args: any[]) => Observable<any>;
+import ipcMain from './main';
+import ipcRenderer from './renderer';
 
-export interface Receiver {
-  send(channel: string, ...args: any[]): void;
-}
+export default (process.type === 'renderer' ? ipcRenderer : ipcMain);

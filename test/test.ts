@@ -1,7 +1,7 @@
 import { expect } from 'chai';
 import { ipcRenderer } from 'electron';
-import { slow, suite, test, timeout } from 'mocha-typescript';
-import { Observable } from 'rxjs';
+import { suite, test } from 'mocha-typescript';
+import { Observable } from 'rxjs/Rx';
 import rxIpc from '../src/renderer';
 
 @suite('Rx-Electron-IPC')
@@ -10,7 +10,7 @@ class Main {
   @test 'It should pass an Observable from main to renderer'() {
     const results = [];
     return new Promise((resolve) => {
-      rxIpc.runCommand('test-main', null, 1, 2, {test: 'passed'})
+      rxIpc.runCommand('test-main', null, 1, 2, { test: 'passed' })
       .subscribe(
         (data) => {
           results.push(data);
@@ -19,7 +19,7 @@ class Main {
           throw err;
         },
         () => {
-          expect(results).to.deep.equal([1, 2, {test: 'passed'}]);
+          expect(results).to.deep.equal([1, 2, { test: 'passed' }]);
           resolve();
         }
       );
@@ -65,7 +65,7 @@ class Main {
 
   @test 'The renderer should run a command from the main process'() {
     return new Promise((resolve) => {
-      function testCommand(...args) {
+      function testCommand(...args: any[]) {
         return Observable.from(args);
       }
       ipcRenderer.on('results-from-main', (event, results) => {
@@ -98,12 +98,12 @@ class Main {
     }
     rxIpc.registerListener('remove-test-1', noop);
     rxIpc.registerListener('remove-test-1', noop);
-    expect(rxIpc._getListenerCount('remove-test-1')).to.equal(2);
+    expect(rxIpc.getListenerCount('remove-test-1')).to.equal(2);
     rxIpc.removeListeners('remove-test-1');
-    expect(rxIpc._getListenerCount('remove-test-1')).to.equal(0);
+    expect(rxIpc.getListenerCount('remove-test-1')).to.equal(0);
     rxIpc.registerListener('remove-test-2', noop);
-    expect(rxIpc._getListenerCount('remove-test-2')).to.equal(1);
+    expect(rxIpc.getListenerCount('remove-test-2')).to.equal(1);
     rxIpc.cleanUp();
-    expect(rxIpc._getListenerCount('remove-test-2')).to.equal(0);
+    expect(rxIpc.getListenerCount('remove-test-2')).to.equal(0);
   }
 }

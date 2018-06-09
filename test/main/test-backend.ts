@@ -1,9 +1,10 @@
 import { ipcMain, webContents } from 'electron';
 import { Observable } from 'rxjs';
 import rxIpc from '../../src/main';
+import {from} from 'rxjs/internal/observable/from';
 
 function testMain(...args) {
-  return Observable.from(args);
+  return from(args);
 }
 
 function testError() {
@@ -19,7 +20,7 @@ ipcMain.on('main-run-command', (event) => {
   rxIpc.runCommand('command-from-main', event.sender, 3, 2, 1)
     .subscribe(
       (data) => {
-        results.push(data)
+        results.push(data);
       },
       (err) => {
         throw err;
@@ -27,7 +28,7 @@ ipcMain.on('main-run-command', (event) => {
       () => {
         event.sender.send('results-from-main', results);
       }
-    )
+    );
 });
 
 rxIpc.registerListener('test-main', testMain);

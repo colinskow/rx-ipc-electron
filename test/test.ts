@@ -2,7 +2,9 @@ import { expect } from 'chai';
 import { ipcRenderer } from 'electron';
 import { suite, test } from 'mocha-typescript';
 import { Observable } from 'rxjs/Rx';
-import rxIpc from '../src/renderer';
+
+import { RxIpc } from '../src/rx-ipc';
+const rxIpc = new RxIpc(ipcRenderer, { ipcChannelPrefix: '$foo/' });
 
 @suite('Rx-Electron-IPC')
 class Main {

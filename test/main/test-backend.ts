@@ -1,6 +1,8 @@
 import { ipcMain } from 'electron';
 import { Observable } from 'rxjs/Rx';
-import rxIpc from '../../src/main';
+
+import { RxIpc } from '../../src/rx-ipc';
+const rxIpc = new RxIpc(ipcMain, { ipcChannelPrefix: '$foo/' });
 
 function testMain(...args: any[]) {
   return Observable.from(args);

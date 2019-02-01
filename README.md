@@ -65,6 +65,13 @@ rxIpc.runCommand('create-observable', null, 1, 2, 3)
 ```
 
 ## API
+#### `new RxIpc(icpRenderer | ipcMain, options)
+##### `options.ipcChannelPrefix`
+When sending and receiving IPC message use a prefix
+for channel name.
+
+Can be used to fix collisions between several instances of
+`rpx-ipc-electron`.
 
 #### `rxIpc.checkRemoteListener(channel, receiver)`
 
